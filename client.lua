@@ -204,6 +204,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                 carryingBox=false
                                 DeleteEntity(box)
                                 pickupPoint:remove()
+                                isDoingJob=false
                             end
                             
                         end
