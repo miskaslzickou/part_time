@@ -159,7 +159,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                         name='delivery_vehicle',
                                         icon='fa-truck',
                                         distance=2,
-                                        bones='boot',
+                                        bones={'door_pside_r','seat_pside_r','seat_dside_r','door_dside_r'},
                                         onSelect=function(data)
                                             RemoveAnimDict("anim@heists@box_carry@")
                                             lib.notify({description='Zásilka byla dáno do vozidla',type='success'})
