@@ -124,7 +124,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                    
                                     lib.requestAnimDict("mp_common")
                                     lib.requestModel('prop_cs_cardbox_01')
-                                    local box=CreateObject(GetHashKey('prop_cs_cardbox_01'),pickupLocation.x,pickupLocation.y,pickupLocation.z,true,true,true)
+                                    box=CreateObject(GetHashKey('prop_cs_cardbox_01'),pickupLocation.x,pickupLocation.y,pickupLocation.z,true,true,true)
 
                                     AttachEntityToEntity(box, pickupPed, 71, -0.085318464621196, 0.1162040589082, -0.20954139782074, 0, 0, 0, false, false, false, false, 2, true)
                                     Wait(1000)
