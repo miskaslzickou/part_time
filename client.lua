@@ -84,11 +84,11 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                         
                         
                         AddTextEntry('pickupLocationBlip', 'Místo vyzvednutí')
-                        local pickupLocationBlip=AddBlipForCoord(pickupLocation.x,pickupLocation.y,pickupLocation.z)
+                        pickupLocationBlip=AddBlipForCoord(pickupLocation.x,pickupLocation.y,pickupLocation.z)
                         BeginTextCommandSetBlipName('pickupLocationBlip')
                         SetNewWaypoint(pickupLocation.x,pickupLocation.y)
                         EndTextCommandSetBlipName(pickupLocationBlip)
-                        local pickupPoint = lib.points.new({
+                         pickupPoint = lib.points.new({
                             coords=pickupLocation.xyz,
                             distance=60,
 
@@ -161,6 +161,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                         distance=2,
                                         bones={'door_pside_r','seat_pside_r','seat_dside_r','door_dside_r'},
                                         onSelect=function(data)
+                                            pickupPoint:remove()
                                             RemoveAnimDict("anim@heists@box_carry@")
                                             lib.notify({description='Zásilka byla dáno do vozidla',type='success'})
                                             DeleteEntity(box)
@@ -179,7 +180,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                                 
                                                 table.insert(reward,math.random(50,100))
                                                 deliveryPoint:remove()
-                                                pickupPoint:remove()
+                                                
                                                
                                                
                                                 isDoingJob=false
@@ -200,9 +201,10 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                             exports.ox_target:removeLocalEntity(pickupPed,"pickup_box")
                             DeleteEntity(pickupPed)
                             if carryingBox then -- distance check jestli hráč opustí oblast
-                                lib.notify({description='Zásilka byla ztracena/ opustil si oblast se zásilkou',type='error'})
+                                lib.notify({description='Zásilka byla ztracena/opustil si oblast se zásilkou',type='error'})
                                 carryingBox=false
                                 DeleteEntity(box)
+                                exports.ox_target:removeLocalEntity(deliveryVehicle,"delivery_vehicle")
                                 pickupPoint:remove()
                                 isDoingJob=false
                             end
@@ -219,8 +221,13 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                 {
                     title='Přestat pracovat a vyzvednout odměnu',
                     onSelect=function ()
+                        if not isDoingJob then return end
                         isDoingJob=false
                         DeleteEntity(deliveryVehicle)
+                        RemoveBlip(pickupLocationBlip)
+                        pickupPoint:remove()
+                        
+
                         if #reward==0 then
                             lib.notify({description='Nemáš žádnou odměnu',type='error'})
                         else
