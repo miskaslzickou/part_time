@@ -36,6 +36,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
     FreezeEntityPosition(DepoNPC,true)
     SetEntityInvincible(DepoNPC,true)
     SetBlockingOfNonTemporaryEvents(DepoNPC,true)
+    SetModelAsNoLongerNeeded(Config.DepoNPC.Model)
     exports.ox_target:addLocalEntity(DepoNPC,{
         label="Promluvit s pánem",
         name="box_delivery",
@@ -59,7 +60,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                         for i=1,#Config.Depo.SpawnVehicleLocation-1 do
                             local spawnLoc=Config.Depo.SpawnVehicleLocation 
                             
-                            if deliveryVehicle == nil then
+                            if deliveryVehicle == nil then -- validace spawnování vozidla
                                 if #lib.getNearbyVehicles(spawnLoc[i].xyz, 2.0) ==0 then
                                 deliveryVehicle=CreateVehicle(
                                 joaat(Config.Depo.VehicleModel) --[[ Hash ]], 
@@ -70,17 +71,18 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                 true --[[ boolean ]], 
                                 true --[[ boolean ]]
                                 )
+                                lib.notify({description='Vozidlo máte na parkovišti',type='success'})
                                 end
                             else
                             break
                             end
                             
                         end
-                        SetModelAsNoLongerNeeded(Config.Depo.VehicleModel)
+                       
                         if deliveryVehicle== nil then lib.notify({description='Parkoviště je plné zkus to později',type='error'}) return end
                         isDoingJob=true
 
-                         pickupLocation=Config.Depo.PickupLocations[math.random(1,#Config.Depo.PickupLocations)]
+                        pickupLocation=Config.Depo.PickupLocations[math.random(1,#Config.Depo.PickupLocations)]
                         
                         
                         AddTextEntry('pickupLocationBlip', 'Místo vyzvednutí')
@@ -149,7 +151,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
                                     carryingBox=true
                                     RemoveAnimDict("mp_common")
                                     RemoveBlip(pickupLocationBlip)
-                                    
+                                    SetModelAsNoLongerNeeded(pedModel)
                                     
 
                                     
@@ -248,7 +250,7 @@ function point:onEnter() -- využití client side static pedů je to lepší ne�
         end
 
     })
-    SetModelAsNoLongerNeeded(Config.DepoNPC.Model)
+   
 
 end
 function point:onExit()
